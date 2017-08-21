@@ -2,6 +2,7 @@ package au.com.vocus.elastictool.parser;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -72,28 +73,50 @@ public class ElasticParser {
 		}
 	}
 	
-	public Hashtable<String, String> toDotNotation(JSONObject source, String parentKey) {	
+	public Hashtable<String, Object> toDotNotation(JSONObject source, String parentKey) {
+		return toDotNotation(source, parentKey, false);
+	}
+	
+	public Hashtable<String, Object> toDotNotation(JSONObject source, String parentKey, boolean flatTable) {	
 		if(source == null) return null;
 		if(parentKey == null || parentKey == "") 
 			parentKey = "";
 		else
 			parentKey += ".";
-		Hashtable<String, String> table = new Hashtable<String, String>();
+		Hashtable<String, Object> table = new Hashtable<String, Object>();
 				
 		for(Object key : source.keySet()) {
+			String newKey = parentKey + key;
 			Object value = source.get(key);		
 			if(value instanceof JSONArray) {
-				int i = 0;
-				for(Object element : (JSONArray)value) {
-					table.putAll(toDotNotation((JSONObject)element, parentKey + key + "[" + i + "]"));
-					i++;
-				}
+				if(flatTable)
+					table.putAll(toFlatTable(newKey, (JSONArray)value));
+				else
+					table.put(newKey, toTable((JSONArray)value));
 			} else if (value instanceof JSONObject) {
-				table.putAll(toDotNotation((JSONObject)value, parentKey + key));
+				table.putAll(toDotNotation((JSONObject)value, newKey, flatTable));
 			} else {
-				table.put(parentKey + key, value.toString());
+				table.put(newKey, value.toString());
 			}
 		}		
 		return table;
+	}
+	
+	private Hashtable<String, Object> toFlatTable(String key, JSONArray table) {
+		int i = 0;
+		Hashtable<String, Object> subTable = new Hashtable<String, Object>();
+		for(Object element : table) {
+			subTable.putAll(toDotNotation((JSONObject)element, key + "[" + i + "]", true));
+			i++;
+		}
+		return subTable;
+	}
+	
+	private List<Hashtable<String, Object>> toTable(JSONArray table) {
+		List<Hashtable<String, Object>> subTable = new ArrayList<Hashtable<String, Object>>();
+		for(Object element : table) {
+			subTable.add(toDotNotation((JSONObject)element, null, false));
+		}
+		return subTable;
 	}
 }
