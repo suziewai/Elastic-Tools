@@ -1,5 +1,6 @@
 package au.com.vocus.elastictool.schema;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class ElasticRecord {

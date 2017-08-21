@@ -1,6 +1,7 @@
 package au.com.vocus.elastictool.parser;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -53,5 +54,46 @@ public class ElasticParser {
 		
 	}
 	
+	public void parseSource(JSONObject source) {
+		
+		if(source == null) return;
+				
+		for(Object key : source.keySet()) {
+			Object value = source.get(key);		
+			if(value instanceof JSONArray) {
+				for(Object element : (JSONArray)value) {
+					parseSource((JSONObject)element);
+				}
+			} else if (value instanceof JSONObject) {
+				parseSource((JSONObject)value);
+			} else {
+				System.out.println(key + ": " + value);
+			}
+		}
+	}
 	
+	public Hashtable<String, String> toDotNotation(JSONObject source, String parentKey) {	
+		if(source == null) return null;
+		if(parentKey == null || parentKey == "") 
+			parentKey = "";
+		else
+			parentKey += ".";
+		Hashtable<String, String> table = new Hashtable<String, String>();
+				
+		for(Object key : source.keySet()) {
+			Object value = source.get(key);		
+			if(value instanceof JSONArray) {
+				int i = 0;
+				for(Object element : (JSONArray)value) {
+					table.putAll(toDotNotation((JSONObject)element, parentKey + key + "[" + i + "]"));
+					i++;
+				}
+			} else if (value instanceof JSONObject) {
+				table.putAll(toDotNotation((JSONObject)value, parentKey + key));
+			} else {
+				table.put(parentKey + key, value.toString());
+			}
+		}		
+		return table;
+	}
 }
