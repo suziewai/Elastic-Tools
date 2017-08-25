@@ -11,6 +11,8 @@ import org.json.simple.parser.ParseException;
 
 import au.com.vocus.elastictool.schema.ElasticRecord;
 import au.com.vocus.elastictool.schema.ElasticResponse;
+import au.com.vocus.elastictool.schema.search.Query;
+import au.com.vocus.elastictool.schema.search.QueryCriteria;
 
 public class ElasticParser {
 	
@@ -118,5 +120,19 @@ public class ElasticParser {
 			subTable.add(toDotNotation((JSONObject)element, null, false));
 		}
 		return subTable;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static String getSearchQuery(Query q) {
+		JSONObject json = new JSONObject();
+		if(q.getQueryList().size() == 1) {
+			json.put("query", q.getQueryList().get(0).getValue());
+		} else {
+			JSONArray child = new JSONArray();
+			for(QueryCriteria criteria : q.getQueryList()) {
+				child.add(criteria.getValue());
+			}
+		}
+		return json.toJSONString();
 	}
 }
