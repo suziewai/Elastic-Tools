@@ -18,7 +18,7 @@ public class Query {
 		
 		JSONObject value = new JSONObject();		
 		for(QueryCriterion criterion : queryList) {
-			if(criterion instanceof MultiCondition) {
+			if(criterion instanceof MultiCondition && ((MultiCondition) criterion).isArray()) {
 				value.put(criterion.getKey(), ((MultiCondition)criterion).getValueArray());
 			} else {
 				value.put(criterion.getKey(), criterion.getValue());

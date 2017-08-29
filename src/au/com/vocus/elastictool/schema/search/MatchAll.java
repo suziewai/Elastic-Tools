@@ -9,7 +9,6 @@ public class MatchAll implements QueryCriterion {
 		return "match_all";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getValue() {
 		return null;

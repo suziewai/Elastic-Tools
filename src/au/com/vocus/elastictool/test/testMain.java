@@ -1,5 +1,8 @@
 package au.com.vocus.elastictool.test;
 
+import java.util.Hashtable;
+import java.util.List;
+
 import au.com.vocus.elastictool.parser.ElasticParser;
 import au.com.vocus.elastictool.schema.ElasticRecord;
 import au.com.vocus.elastictool.schema.ElasticResponse;
@@ -23,10 +26,75 @@ public class testMain {
 			System.out.println(record.get_id());
 			System.out.println(record.get_source());
 		}
+		
+		testToFlatTable(getTestResponse());
+		testToTable(getTestResponse());
 	}
 	
 	private static String getTestSearch() {
 		return "{\"query\":{\"query_string\":{\"query\":\"events.data.eventTime : >1492475905965\"}}}";
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static ElasticResponse testToFlatTable(String jsonStr) {
+		ElasticParser parser = new ElasticParser();
+		ElasticResponse eObj = parser.parse(jsonStr);
+		
+		for(Object element : eObj.getHits().getRecords()) {
+			ElasticRecord record = (ElasticRecord) element;
+			Hashtable<String, Object> table = parser.toDotNotation(record.get_source(), "abc", true);
+			System.out.println("id flat = " + record.get_id());
+			System.out.println("\t_source : " + "------------------------------------");
+			
+			print(table, "\t");
+		}
+		return eObj;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static ElasticResponse testToTable(String jsonStr) {
+		ElasticParser parser = new ElasticParser();
+		ElasticResponse eObj = parser.parse(jsonStr);
+		
+		for(Object element : eObj.getHits().getRecords()) {
+			ElasticRecord record = (ElasticRecord) element;
+			Hashtable<String, Object> table = parser.toDotNotation(record.get_source(), null);
+			System.out.println("id = " + record.get_id());
+			System.out.println("\t_source : " + "------------------------------------");
+			
+			print(table);
+		}
+		return eObj;
+	}
+	
+	private static void print(Hashtable<String, Object> result) {
+		print(result, "\t");
+	}
+	
+	private static void print(Hashtable<String, Object> result, String prefix) {
+		
+		if(prefix == null || prefix == "")
+			prefix = "\t";
+		else
+			prefix += "\t";
+		
+		for(String key : result.keySet()){
+			Object obj = result.get(key);
+			
+			if(obj instanceof List<?>) {
+				System.out.println(prefix + key);
+				List<Hashtable<String, Object>> list = (List<Hashtable<String, Object>>) obj;
+				int i=0;
+				for(Hashtable<String, Object> listItem : list) {
+					print(listItem, prefix + " " + i);
+					i++;
+				}
+			}
+			else {
+				System.out.println(prefix + key + " : " + obj);
+			}
+		}
+		
 	}
 	
 	private static String getTestResponse() {

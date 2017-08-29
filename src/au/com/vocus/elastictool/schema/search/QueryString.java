@@ -33,7 +33,6 @@ public class QueryString implements QueryCriterion {
 		return "query_string";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getValue() {
 		JSONObject value = new JSONObject();
