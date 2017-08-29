@@ -1,10 +1,8 @@
 package au.com.vocus.elastictool.schema.search;
 
-public class MustNot extends MultiCondition {
+public class Must extends MultiCondition {
 
-	@Override
 	public String getKey() {
-		return "must_not";
+		return "must";
 	}
-
 }

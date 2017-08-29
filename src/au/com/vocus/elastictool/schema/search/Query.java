@@ -3,19 +3,35 @@ package au.com.vocus.elastictool.schema.search;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.simple.JSONObject;
+
 public class Query {
 
-	private List<QueryCriteria> queryList = new ArrayList<QueryCriteria>();
+	protected List<QueryCriterion> queryList = new ArrayList<QueryCriterion>();
 	
 	public String getKey() {
 		return "query";
 	}
 	
-	public void addCriteria(QueryCriteria criteria) {
+	@SuppressWarnings("unchecked")
+	public JSONObject getValue() {
+		
+		JSONObject value = new JSONObject();		
+		for(QueryCriterion criterion : queryList) {
+			if(criterion instanceof MultiCondition) {
+				value.put(criterion.getKey(), ((MultiCondition)criterion).getValueArray());
+			} else {
+				value.put(criterion.getKey(), criterion.getValue());
+			}
+		}
+		return value;
+	}
+	
+	public void addCriteria(QueryCriterion criteria) {
 		queryList.add(criteria);
 	}
 	
-	public List<QueryCriteria> getQueryList() {
+	public List<QueryCriterion> getQueryList() {
 		return queryList;
 	}
 	

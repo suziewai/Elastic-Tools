@@ -5,7 +5,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class QueryString implements QueryCriteria {
+public class QueryString implements QueryCriterion {
 
 	private String query;
 	private List<String> default_field;
@@ -28,8 +28,8 @@ public class QueryString implements QueryCriteria {
 	private Boolean splitOnWhilespace = null;
 	private Boolean allFields = null;
 	
-			
-	private String getKey() {
+	@Override
+	public String getKey() {
 		return "query_string";
 	}
 
@@ -37,28 +37,27 @@ public class QueryString implements QueryCriteria {
 	@Override
 	public JSONObject getValue() {
 		JSONObject value = new JSONObject();
-		JSONObject jsonObj = new JSONObject();
-		addCriteria(jsonObj, "query", query);
-		addCriteria(jsonObj, "default_field", default_field);
-		addCriteria(jsonObj, "defaultOperator", defaultOperator);
-		addCriteria(jsonObj, "analyzer", analyzer);
-		addCriteria(jsonObj, "allowLeadingWilcard", allowLeadingWilcard);
-		addCriteria(jsonObj, "enablePositionIncrements", enablePositionIncrements);
-		addCriteria(jsonObj, "fuzzyMaxExpansions", fuzzyMaxExpansions);
-		addCriteria(jsonObj, "fuzziness", fuzziness);
-		addCriteria(jsonObj, "fuzzyPrefixLength", fuzzyPrefixLength);
-		addCriteria(jsonObj, "phraseSlop", phraseSlop);
-		addCriteria(jsonObj, "boost", boost);
-		addCriteria(jsonObj, "autoGeneratePhraseQueries", boost);
-		addCriteria(jsonObj, "analyzeWildcard", analyzeWildcard);
-		addCriteria(jsonObj, "maxDeterminizedStates", maxDeterminizedStates);
-		addCriteria(jsonObj, "minShouldMatch", minShouldMatch);
-		addCriteria(jsonObj, "lenient", lenient);
-		addCriteria(jsonObj, "timezone", timezone);
-		addCriteria(jsonObj, "quoteFieldSuffix", quoteFieldSuffix);
-		addCriteria(jsonObj, "splitOnWhilespace", splitOnWhilespace);
-		addCriteria(jsonObj, "allFields", allFields);
-		value.put(getKey(), jsonObj);
+		addCriteria(value, "query", query);
+		addCriteria(value, "default_field", default_field);
+		addCriteria(value, "defaultOperator", defaultOperator);
+		addCriteria(value, "analyzer", analyzer);
+		addCriteria(value, "allowLeadingWilcard", allowLeadingWilcard);
+		addCriteria(value, "enablePositionIncrements", enablePositionIncrements);
+		addCriteria(value, "fuzzyMaxExpansions", fuzzyMaxExpansions);
+		addCriteria(value, "fuzziness", fuzziness);
+		addCriteria(value, "fuzzyPrefixLength", fuzzyPrefixLength);
+		addCriteria(value, "phraseSlop", phraseSlop);
+		addCriteria(value, "boost", boost);
+		addCriteria(value, "autoGeneratePhraseQueries", boost);
+		addCriteria(value, "analyzeWildcard", analyzeWildcard);
+		addCriteria(value, "maxDeterminizedStates", maxDeterminizedStates);
+		addCriteria(value, "minShouldMatch", minShouldMatch);
+		addCriteria(value, "lenient", lenient);
+		addCriteria(value, "timezone", timezone);
+		addCriteria(value, "quoteFieldSuffix", quoteFieldSuffix);
+		addCriteria(value, "splitOnWhilespace", splitOnWhilespace);
+		addCriteria(value, "allFields", allFields);
+		
 		return value;
 	}
 

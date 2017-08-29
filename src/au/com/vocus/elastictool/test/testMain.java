@@ -14,7 +14,7 @@ public class testMain {
 		QueryString qStr = new QueryString();
 		qStr.setQuery("events.data.eventTime : >1492475905965");
 		q.addCriteria(qStr);
-		System.out.println(ElasticParser.getSearchQuery(q));
+		System.out.println(ElasticParser.buildSearchQuery(q));
 		System.out.println(getTestSearch());
 		
 		ElasticParser parser = new ElasticParser();

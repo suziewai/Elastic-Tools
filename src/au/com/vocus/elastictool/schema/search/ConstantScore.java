@@ -2,17 +2,18 @@ package au.com.vocus.elastictool.schema.search;
 
 import org.json.simple.JSONObject;
 
-public class ConstantScore implements QueryCriteria {
+public class ConstantScore implements QueryCriterion {
 
-	private String getKey() {
+	@Override
+	public String getKey() {
 		return "constant_score";
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject getValue() {
-		JSONObject json = new JSONObject();
-		json.put(getKey(), null);
-		return json;
+		JSONObject value = new JSONObject();
+		value.put(getKey(), null);
+		return value;
 	}
 }
