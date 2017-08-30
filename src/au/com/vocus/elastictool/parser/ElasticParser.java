@@ -12,7 +12,6 @@ import org.json.simple.parser.ParseException;
 import au.com.vocus.elastictool.schema.ElasticRecord;
 import au.com.vocus.elastictool.schema.ElasticResponse;
 import au.com.vocus.elastictool.schema.search.Query;
-import au.com.vocus.elastictool.schema.search.QueryCriterion;
 
 public class ElasticParser {
 	
@@ -126,7 +125,6 @@ public class ElasticParser {
 	public static String buildSearchQuery(Query q) {
 		JSONObject json = new JSONObject();
 		json.put(q.getKey(), q.getValue());
-		System.out.println(json.toJSONString());
 		return json.toJSONString();
 	}
 }
